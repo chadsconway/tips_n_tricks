@@ -1,0 +1,11 @@
+Switch to user
+
+sudo su - <user>
+
+delete just the user:
+
+userdel <user>
+
+deletes user and home directory and mail spool:
+
+userdel -r <user>

@@ -1,0 +1,33 @@
+Web Server IP:	93.191.156.59
+
+SSH hostname: 	linux194.unoeuro.com
+
+SSH port:	22
+
+SSH Username:	thelivingrosar.com
+
+SSH key-pair:	Pakraevet (Swedish a and 'ae')
+
+SSH Password:	Rogi9813HVA
+
+FTP host name:	linux194.unoeuro.com
+
+FTP port:	21
+
+FTP username:	thelivingrosar.com
+
+FTP password:	Rogi9813HVA
+
+FTP link:	 	ftp://thelivingrosar.com:Rogi9813HVA@linux194.unoeuro.com/
+
+Folder for web files:	/public_html/
+
+MySQL host name:	mysql173.unoeuro.com
+
+MySQL port:		3306
+
+MySQL user name:	thelivingrosaryapostolat_com
+
+MySQL password:		Rogi9813HVA
+
+MySQL database:		thelivingrosaryapostolate_com_db

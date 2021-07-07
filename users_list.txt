@@ -1,0 +1,8 @@
+list users:
+
+$ less /etc/passwd
+
+exit less:
+
+$ q 
+

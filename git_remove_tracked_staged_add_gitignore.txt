@@ -1,0 +1,9 @@
+git rm -r --cached .
+git add -A
+git commit -am 'Removing ignored files'
+
+The first command will un-track all files in your git repository.
+
+The second command will then add all of the files in your git repository, except those that match rules in your .gitignore. Thus, we have un-tracked several files with just two commands.
+
+Then the last command is to commit the changes, which will just be removed files.

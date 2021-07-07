@@ -1,0 +1,3 @@
+what process is on a specific port:
+
+$ lsof -i :<port>

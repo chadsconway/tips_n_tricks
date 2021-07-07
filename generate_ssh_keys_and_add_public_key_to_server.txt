@@ -1,0 +1,69 @@
+
+
+SSH keys are a way to identify trusted computers, without involving passwords. The steps below will walk you through generating an SSH key and adding the public key to the server.
+
+Step 1: Check for SSH Keys
+
+First, check for existing SSH keys on your computer. Open Git Bash, Cygwin, or Terminal, etc. and enter:
+
+$ ls -al ~/.ssh
+# Lists all the files in your .ssh directory, if they exist
+Generating public/private rsa key pair
+
+Check the directory listing to see if you already have a public SSH key. By default, the filenames of the public keys are one of the following:
+
+    id_dsa.pub
+    is_ecdsa.pub
+    id_ed25519.pub
+    id_rsa.pub
+
+If you see an existing public and private key pair listed (for example id_rsa.pub and id_rsa) that you’d like to use, you can skip Step 2 and go straight to Step 3.
+Step 2: Generate a new SSH key
+
+With your command line tool still open, enter the text shown below. Make sure you substitute in your email address:
+
+$ ssh-keygen -t rsa -b 4096 -C "mcflym@N123456"
+# Creates a new ssh key, using the provided domain username and computer name as a label
+Generating public/private rsa key pair.
+
+You’ll be asked to enter a passphrase, or simply press Enter to not enter a passphrase:
+
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+
+After you enter a passphrase (or just press Enter twice), review the fingerprint, or ‘id’ of your SSH key:
+
+Your identification has been saved in /Users/username/.ssh/id_rsa.
+Your public key has been saved in /Users/username/.ssh/id_rsa.pub.
+The key fingerprint is:
+nss2VhNB0Y62VIToM+/qYe3HS4TPXmrhuBxjUz4l/I8= your@email.com
+
+Step 3: Add your key to the ssh-agent
+
+To configure the ssh-agent program to use your SSH key, first ensure ssh-agent is enabled.
+
+# start the ssh-agent in the background
+$ eval $(ssh-agent -s)
+Agent pid 59566
+
+If you are using Git Bash, turn on the ssh-agent with command shown below instead:
+
+# start the ssh-agent in the background
+$ eval `ssh-agent`
+Agent pid 59566
+
+Then, add your SSH key to the ssh-agent:
+
+$ ssh-add ~/.ssh/id_rsa
+
+Step 4: Add your SSH key to the server
+
+To add your public SSH key to the server, you’ll copy the public SSH key you just created to the server. Substitute “username” with your username on the server, and “server.address.com” with the domain address or IP address of your server:
+
+$ cat ~/.ssh/id_rsa.pub | ssh username@server.address.com 'cat >> ~/.ssh/authorized_keys'
+
+The server will then prompt you for your password:
+
+username@server.address.com's password:
+
+That’s it! You should now be set up to connect to the server without having to authenticate.

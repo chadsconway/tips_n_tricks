@@ -1,0 +1,10 @@
+That's not JSON at all!
+
+If you want to be absolutely sure that Adafruit IO will not interfere with the data you're sending, encode it as a Base64 string first.
+
+btoa(JSON.stringify({ "something": "here" }))
+// "eyJzb21ldGhpbmciOiJoZXJlIn0="
+atob("eyJzb21ldGhpbmciOiJoZXJlIn0=")
+// {"something":"here"}
+
+This solution is also ideal if you want to store or send binary data with Adafruit IO. You won't get to see any pretty charts, but your data will remain exactly the way you left it.

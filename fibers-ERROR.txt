@@ -1,0 +1,31 @@
+Date: 11-30-2019
+Issue: ## Error There is an issue with node-fibers ##
+App: lra-v.0.4.0
+
+Fixes Attempted:
+
+1.	From lra-v.0.4.0 Directory:
+
+$ yarn remove fibers
+
+2.	lra-v.0.4.0 was using node version 10.15.1
+
+$ nvm remove 10.15.1 
+-- Got an error, said to manually remove 10.15.1
+
+3.	fibers or node-fibers not listed in package.json so must be a dependency of something, need to figure out what:
+
+In yarn.lock searched for fibers:
+
+fibers has '4' occurences in yarn.lock:
+	Dependency of:
+	1.  @nuxtjs/vuetify@^1.9.0
+	2.  fibers@^4.0.1: version 4.0.2
+
+### THE FIX ###
+
+Deleted:  node_modules, yarn.lock in lra-v.0.4.0
+Ran:
+
+$ yarn install
+$ yarn dev

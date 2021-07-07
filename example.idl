@@ -1,0 +1,513 @@
+interface interface_identifier { /* interface_members... */ };
+partial interface interface_identifier { /* interface_members... */ };
+namespace namespace_identifier { /* namespace_members... */ };
+partial namespace namespace_identifier { /* namespace_members... */ };
+dictionary dictionary_identifier { /* dictionary_members... */ };
+partial dictionary dictionary_identifier { /* dictionary_members... */ };
+enum enumeration_identifier { "enum", "values" /* , ... */ };
+callback callback_identifier = return_type (/* arguments... */);
+callback interface callback_interface_identifier { /* interface_members... */ };
+
+
+
+    For named definitions, the identifier token that appears directly after the interface, namespace, dictionary, enum or callback keyword determines the identifier of that definition.
+
+    interface interface_identifier { /* interface_members... */ };
+    partial interface interface_identifier { /* interface_members... */ };
+    namespace namespace_identifier { /* namespace_members... */ };
+    partial namespace namespace_identifier { /* namespace_members... */ };
+    dictionary dictionary_identifier { /* dictionary_members... */ };
+    partial dictionary dictionary_identifier { /* dictionary_members... */ };
+    enum enumeration_identifier { "enum", "values" /* , ... */ };
+    callback callback_identifier = return_type (/* arguments... */);
+    callback interface callback_interface_identifier { /* interface_members... */ };
+
+    For attributes, typedefs and dictionary members, the final identifier token before the semicolon at the end of the declaration determines the identifier.
+
+    [extended_attributes]
+    interface identifier {
+      attribute type attribute_identifier;
+    };
+
+    typedef type typedef_identifier;
+
+    dictionary identifier {
+      type dictionary_member_identifier;
+    };
+
+    For constants, the identifier token before the equals sign determines the identifier.
+
+    const type constant_identifier = 42;
+
+    For operations, the identifier token that appears after the return type but before the opening parenthesis (that is, one that is matched as part of the OptionalOperationName grammar symbol in an OperationRest) determines the identifier of the operation. If there is no such identifier token, then the operation does not have an identifier.
+
+    interface interface_identifier {
+      return_type operation_identifier(/* arguments... */);
+    };
+
+Note: Operations can have no identifier when they are being used to declare a special kind of operation, such as a getter or setter.
+
+For all of these constructs, the identifier is the value of the identifier token with any leading U+005F LOW LINE ("_") character (underscore) removed.
+
+Note: A leading "_" is used to escape an identifier from looking like a reserved word so that, for example, an interface named "interface" can be defined. The leading "_" is dropped to unescape the identifier.
+
+Operation arguments can take a slightly wider set of identifiers. In an operation declaration, the identifier of an argument is specified immediately after its type and is given by either an identifier token or by one of the keywords that match the ArgumentNameKeyword symbol. If one of these keywords is used, it need not be escaped with a leading underscore.
+
+interface interface_identifier {
+  return_type operation_identifier(argument_type argument_identifier /* , ... */);
+};
+
+ArgumentNameKeyword ::
+    async
+    attribute
+    callback
+    const
+    constructor
+    deleter
+    dictionary
+    enum
+    getter
+    includes
+    inherit
+    interface
+    iterable
+    maplike
+    mixin
+    namespace
+    partial
+    readonly
+    required
+    setlike
+    setter
+    static
+    stringifier
+    typedef
+    unrestricted
+
+If an identifier token is used, then the identifier of the operation argument is the value of that token with any leading U+005F LOW LINE ("_") character (underscore) removed. If instead one of the ArgumentNameKeyword keyword token is used, then the identifier of the operation argument is simply that token.
+
+The identifier of any of the abovementioned IDL constructs (except operation arguments) must not be "constructor", "toString", or begin with a U+005F LOW LINE ("_") character. These are known as reserved identifiers.
+
+Although the "toJSON" identifier is not a reserved identifier, it must only be used for regular operations that convert objects to JSON types, as described in § 2.5.3.1 toJSON.
+
+Note: Further restrictions on identifier names for particular constructs may be made in later sections.
+
+Within the set of IDL fragments that a given implementation supports, the identifier of every interface, namespace, dictionary, enumeration, callback function, callback interface and typedef must not be the same as the identifier of any other interface, namespace, dictionary, enumeration, callback function, callback interface or typedef.
+
+Within an IDL fragment, a reference to a definition need not appear after the declaration of the referenced definition. References can also be made across IDL fragments.
+
+Therefore, the following IDL fragment is valid:
+
+[Exposed=Window]
+interface B : A {
+  void f(SequenceOfLongs x);
+};
+
+[Exposed=Window]
+interface A {
+};
+
+typedef sequence<long> SequenceOfLongs;
+
+The following IDL fragment demonstrates how identifiers are given to definitions and interface members.
+
+// Typedef identifier: "number"
+typedef double number;
+
+// Interface identifier: "System"
+[Exposed=Window]
+interface System {
+
+  // Operation identifier:          "createObject"
+  // Operation argument identifier: "interface"
+  object createObject(DOMString _interface);
+
+  // Operation argument identifier: "interface"
+  sequence<object> getObjects(DOMString interface);
+
+  // Operation has no identifier; it declares a getter.
+  getter DOMString (DOMString keyName);
+};
+
+// Interface identifier: "TextField"
+[Exposed=Window]
+interface TextField {
+
+  // Attribute identifier: "const"
+  attribute boolean _const;
+
+  // Attribute identifier: "value"
+  attribute DOMString? _value;
+};
+
+Note that while the second attribute on the TextField interface need not have been escaped with an underscore (because "value" is not a keyword in the IDL grammar), it is still unescaped to obtain the attribute’s identifier.
+2.2. Interfaces
+
+IDL fragments are used to describe object oriented systems. In such systems, objects are entities that have identity and which are encapsulations of state and behavior. An interface is a definition (matching interface InterfaceRest) that declares some state and behavior that an object implementing that interface will expose.
+
+[extended_attributes]
+interface identifier {
+  /* interface_members... */
+};
+
+An interface is a specification of a set of interface members (matching InterfaceMembers). These are the members that appear between the braces in the interface declaration.
+
+Interfaces in Web IDL describe how objects that implement the interface behave. In bindings for object oriented languages, it is expected that an object that implements a particular IDL interface provides ways to inspect and modify the object’s state and to invoke the behavior described by the interface.
+
+An interface can be defined to inherit from another interface. If the identifier of the interface is followed by a U+003A COLON (":") character and an identifier, then that identifier identifies the inherited interface. An object that implements an interface that inherits from another also implements that inherited interface. The object therefore will also have members that correspond to the interface members from the inherited interface.
+
+interface identifier : identifier_of_inherited_interface {
+  /* interface_members... */
+};
+
+The order that members appear in has significance for property enumeration in the ECMAScript binding.
+
+Interfaces may specify an interface member that has the same name as one from an inherited interface. Objects that implement the derived interface will expose the member on the derived interface. It is language binding specific whether the overridden member can be accessed on the object.
+
+Consider the following two interfaces.
+
+[Exposed=Window]
+interface A {
+  void f();
+  void g();
+};
+
+[Exposed=Window]
+interface B : A {
+  void f();
+  void g(DOMString x);
+};
+
+In the ECMAScript language binding, an instance of B will have a prototype chain that looks like the following:
+
+[Object.prototype: the Object prototype object]
+     ↑
+[A.prototype: interface prototype object for A]
+     ↑
+[B.prototype: interface prototype object for B]
+     ↑
+[instanceOfB]
+
+Calling instanceOfB.f() in ECMAScript will invoke the f defined on B. However, the f from A can still be invoked on an object that implements B by calling A.prototype.f.call(instanceOfB).
+
+The inherited interfaces of a given interface A is the set of all interfaces that A inherits from, directly or indirectly. If A does not inherit from another interface, then the set is empty. Otherwise, the set includes the interface B that A inherits from and all of B’s inherited interfaces.
+
+An interface must not be declared such that its inheritance hierarchy has a cycle. That is, an interface A cannot inherit from itself, nor can it inherit from another interface B that inherits from A, and so on.
+The list of inclusive inherited interfaces of an interface I is defined as follows:
+
+    Let result be « ».
+
+    Let interface be I.
+
+    While interface is not null:
+
+        Append interface to result.
+
+        Set interface to the interface that I inherits from, if any, and null otherwise.
+
+    Return result.
+
+Note that general multiple inheritance of interfaces is not supported, and objects also cannot implement arbitrary sets of interfaces. Objects can be defined to implement a single given interface A, which means that it also implements all of A’s inherited interfaces. In addition, an includes statement can be used to define that objects implementing an interface A will always also include the members of the interface mixins A includes.
+
+Each interface member can be preceded by a list of extended attributes (matching ExtendedAttributeList), which can control how the interface member will be handled in language bindings.
+
+[extended_attributes]
+interface identifier {
+
+  [extended_attributes]
+  const type constant_identifier = 42;
+
+  [extended_attributes]
+  attribute type identifier;
+
+  [extended_attributes]
+  return_type identifier(/* arguments... */);
+};
+
+The IDL for interfaces can be split into multiple parts by using partial interface definitions (matching partial interface PartialInterfaceRest). The identifier of a partial interface definition must be the same as the identifier of an interface definition. All of the members that appear on each of the partial interfaces are considered to be members of the interface itself.
+
+interface SomeInterface {
+  /* interface_members... */
+};
+
+partial interface SomeInterface {
+  /* interface_members... */
+};
+
+Note: Partial interface definitions are intended for use as a specification editorial aide, allowing the definition of an interface to be separated over more than one section of the document, and sometimes multiple documents.
+
+The order of appearance of an interface definition and any of its partial interface definitions does not matter.
+
+Note: A partial interface definition cannot specify that the interface inherits from another interface. Inheritance must be specified on the original interface definition.
+
+The relevant language binding determines how interfaces correspond to constructs in the language.
+
+The following extended attributes are applicable to interfaces: [Exposed], [Global], [LegacyWindowAlias], [LegacyFactoryFunction], [LegacyNoInterfaceObject], [LegacyOverrideBuiltIns], and [SecureContext].
+
+The following extended attributes are applicable to partial interfaces: [Exposed], [LegacyOverrideBuiltIns], and [SecureContext].
+
+Interfaces which are not annotated with a [LegacyNoInterfaceObject] extended attribute must be annotated with an [Exposed] extended attribute.
+
+The qualified name of an interface interface is defined as follows:
+
+    Let identifier be the identifier of interface.
+
+    If interface has a [LegacyNamespace] extended attribute, then:
+
+        Let namespace be the identifier argument of the [LegacyNamespace] extended attribute.
+
+        Return the concatenation of « namespace, identifier » with separator U+002E FULL STOP (".").
+
+    Return identifier.
+
+CallbackOrInterfaceOrMixin ::
+    callback CallbackRestOrInterface
+    interface InterfaceOrMixin
+
+InterfaceOrMixin ::
+    InterfaceRest
+    MixinRest
+
+InterfaceRest ::
+    identifier Inheritance { InterfaceMembers } ;
+
+Partial ::
+    partial PartialDefinition
+
+PartialDefinition ::
+    interface PartialInterfaceOrPartialMixin
+    PartialDictionary
+    Namespace
+
+PartialInterfaceOrPartialMixin ::
+    PartialInterfaceRest
+    MixinRest
+
+PartialInterfaceRest ::
+    identifier { PartialInterfaceMembers } ;
+
+InterfaceMembers ::
+    ExtendedAttributeList InterfaceMember InterfaceMembers
+    ε
+
+InterfaceMember ::
+    PartialInterfaceMember
+    Constructor
+
+PartialInterfaceMembers ::
+    ExtendedAttributeList PartialInterfaceMember PartialInterfaceMembers
+    ε
+
+PartialInterfaceMember ::
+    Const
+    Operation
+    Stringifier
+    StaticMember
+    Iterable
+    AsyncIterable
+    ReadOnlyMember
+    ReadWriteAttribute
+    ReadWriteMaplike
+    ReadWriteSetlike
+    InheritAttribute
+
+Inheritance ::
+    : identifier
+    ε
+
+The following IDL fragment demonstrates the definition of two mutually referential interfaces. Both Human and Dog inherit from Animal. Objects that implement either of those two interfaces will thus have a name attribute.
+
+[Exposed=Window]
+interface Animal {
+  attribute DOMString name;
+};
+
+[Exposed=Window]
+interface Human : Animal {
+  attribute Dog? pet;
+};
+
+[Exposed=Window]
+interface Dog : Animal {
+  attribute Human? owner;
+};
+
+The following IDL fragment defines simplified versions of a DOM interfaces and a callback interface.
+
+[Exposed=Window]
+interface Node {
+  readonly attribute DOMString nodeName;
+  readonly attribute Node? parentNode;
+  Node appendChild(Node newChild);
+  void addEventListener(DOMString type, EventListener listener);
+};
+
+callback interface EventListener {
+  void handleEvent(Event event);
+};
+
+Plain objects can implement a callback interface like EventListener:
+
+var node = getNode();                                // Obtain an instance of Node.
+
+var listener = {
+  handleEvent: function(event) {
+    // ...
+  }
+};
+node.addEventListener("click", listener);            // This works.
+
+node.addEventListener("click", function() { ... });  // As does this.
+
+It is not possible for such an object to implement an interface like Node, however:
+
+var node = getNode();  // Obtain an instance of Node.
+
+var newNode = {
+  nodeName: "span",
+  parentNode: null,
+  appendChild: function(newchild) {
+    // ...
+  },
+  addEventListener: function(type, listener) {
+    // ...
+  }
+};
+node.appendChild(newNode);  // This will throw a TypeError exception.
+
+2.3. Interface mixins
+
+An interface mixin is a definition (matching interface MixinRest) that declares state and behavior that can be included by one or more interfaces, and that are exposed by objects that implement an interface that includes the interface mixin.
+
+interface mixin identifier {
+  /* mixin_members... */
+};
+
+Note: Interface mixins, much like partial interfaces, are intended for use as a specification editorial aide, allowing a coherent set of functionalities to be grouped together, and included in multiple interfaces, possibly across documents. They are not meant to be exposed through language bindings. Guidance on when to choose partial interfaces, interface mixins, or partial interface mixins can be found in § 2.3.1 Using mixins and partials.
+
+An interface mixin is a specification of a set of interface mixin members (matching MixinMembers), which are the constants, regular operations, regular attributes, and stringifiers that appear between the braces in the interface mixin declaration.
+
+These constants, regular operations, regular attributes, and stringifiers describe the behaviors that can be implemented by an object, as if they were specified on the interface that includes them.
+
+Static attributes, static operations, special operations except for stringifiers, and iterable, asynchronously iterable, maplike, and setlike declarations cannot appear in interface mixin declarations.
+
+As with interfaces, the IDL for interface mixins can be split into multiple parts by using partial interface mixin definitions (matching partial interface MixinRest). The identifier of a partial interface mixin definition must be the same as the identifier of an interface mixin definition. All of the members that appear on each of the partial interface mixin definitions are considered to be members of the interface mixin itself, and—by extension—of the interfaces that include the interface mixin.
+
+interface mixin SomeMixin {
+  /* mixin_members... */
+};
+
+partial interface mixin SomeMixin {
+  /* mixin_members... */
+};
+
+The order that members appear in has significance for property enumeration in the ECMAScript binding.
+
+Note that unlike interfaces or dictionaries, interface mixins do not create types.
+
+Of the extended attributes defined in this specification, only the [Exposed] and [SecureContext] extended attributes are applicable to interface mixins.
+
+An includes statement is a definition (matching IncludesStatement) used to declare that all objects implementing an interface I (identified by the first identifier) must additionally include the members of interface mixin M (identified by the second identifier). Interface I is said to include interface mixin M.
+
+interface_identifier includes mixin_indentifier;
+
+The first identifier must reference a interface I. The second identifier must reference an interface mixin M.
+
+Each member of M is considered to be a member of each interface I, J, K, … that includes M, as if a copy of each member had been made. So for a given member m of M, interface I is considered to have a member mI, interface J is considered to have a member mJ, interface K is considered to have a member mK, and so on. The host interfaces of mI, mJ, and mK, are I, J, and K respectively.
+
+Note: In ECMAScript, this implies that each regular operation declared as a member of interface mixin M, and exposed as a data property with a built-in function object value, is a distinct built-in function object in each interface prototype object whose associated interface includes M. Similarly, for attributes, each copy of the accessor property has distinct built-in function objects for its getters and setters.
+
+The order of appearance of includes statements affects the order in which interface mixin are included by their host interface.
+
+Member order isn’t clearly specified, in particular when interface mixins are defined in separate documents. It is discussed in issue #432.
+
+No extended attributes defined in this specification are applicable to includes statements.
+
+The following IDL fragment defines an interface, Entry, and an interface mixin, Observable. The includes statement specifies that Observable’s members are always included on objects implementing Entry.
+
+interface Entry {
+  readonly attribute unsigned short entryType;
+  // ...
+};
+
+interface mixin Observable {
+  void addEventListener(DOMString type,
+                        EventListener listener,
+                        boolean useCapture);
+  // ...
+};
+
+Entry includes Observable;
+
+An ECMAScript implementation would thus have an addEventListener property in the prototype chain of every Entry:
+
+var e = getEntry();          // Obtain an instance of Entry.
+typeof e.addEventListener;   // Evaluates to "function".
+
+CallbackOrInterfaceOrMixin ::
+    callback CallbackRestOrInterface
+    interface InterfaceOrMixin
+
+InterfaceOrMixin ::
+    InterfaceRest
+    MixinRest
+
+Partial ::
+    partial PartialDefinition
+
+PartialDefinition ::
+    interface PartialInterfaceOrPartialMixin
+    PartialDictionary
+    Namespace
+
+MixinRest ::
+    mixin identifier { MixinMembers } ;
+
+MixinMembers ::
+    ExtendedAttributeList MixinMember MixinMembers
+    ε
+
+MixinMember ::
+    Const
+    RegularOperation
+    Stringifier
+    OptionalReadOnly AttributeRest
+
+IncludesStatement ::
+    identifier includes identifier ;
+
+2.3.1. Using mixins and partials
+
+This section is informative.
+
+Interface mixins allow the sharing of attributes, constants, and operations across multiple interfaces. If you’re only planning to extend a single interface, you might consider using a partial interface instead.
+
+For example, instead of:
+
+interface mixin WindowSessionStorage {
+  readonly attribute Storage sessionStorage;
+};
+Window includes WindowSessionStorage;
+
+do:
+
+partial interface Window {
+  readonly attribute Storage sessionStorage;
+};
+
+Additionally, you can rely on extending interface mixins exposed by other specifications to target common use cases, such as exposing a set of attributes, constants, or operations across both window and worker contexts.
+
+For example, instead of the common but verbose:
+
+interface mixin GlobalCrypto {
+  readonly attribute Crypto crypto;
+};
+
+Window includes GlobalCrypto;
+WorkerGlobalScope includes GlobalCrypto;
+
+you can extend the WindowOrWorkerGlobalScope interface mixin using a partial interface mixin:
+
+partial interface mixin WindowOrWorkerGlobalScope {
+  readonly attribute Crypto crypto;
+};

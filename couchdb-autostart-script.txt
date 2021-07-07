@@ -1,0 +1,28 @@
+For CouchDB, create script file:
+
+Save as '/home/couchdb/couchdbautostart.sh':
+
+
+[Unit]
+Description=Couchdb service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/couchdb/bin/couchdb -o /dev/stdout -e /dev/stderr
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
+To run file first 'chmod +x couchdbautostart.sh'
+Then './couchdbautostart.sh'
+Then:
+
+systemctl daemon-reload
+
+systemctl enable couchdb.service
+
+systemctl start couchdb.service

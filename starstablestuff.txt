@@ -1,0 +1,35 @@
+Turn off Firewall:
+
+$ sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 0
+
+Check firewall status:
+
+$ defaults read /Library/Preferences/com.apple.alf globalstate
+
+Star Stable Online delete files before reinstall:
+
+$ cd ~/Library/'Application Support'
+
+$ rm -r 'Star Stable Online'
+
+$ rm -r 'StarStableOnline'
+
+change file permissions
+
+$ sudo chmod 775 'filename'
+
+change file ownership
+
+$ sudo chown 'user' 'filename
+
+$ cd /Applications
+$ sudo chown <-R> 'root' 'Star Stable.app'
+ -R recursive
+
+get current OSX
+
+$ system_profiler SPSoftwareDataType
+
+search
+
+$ mdfind

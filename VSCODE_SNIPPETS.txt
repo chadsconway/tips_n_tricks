@@ -1,0 +1,38 @@
+__get form data inside prototype object
+--	let form = this.buildSelectionform();
+	let formdiv = document.querySelector('#formdiv');
+	formdiv.appendChild(form);
+	form.onsubmit = function (event) {
+		let i = 0;
+		for (let i = 0; i < 16; i++) {
+			console.log(
+				`${event.currentTarget[i].value} is checked = ${event.currentTarget[i].checked}`
+			);
+		}
+
+__build a form in javascript
+--Injector.prototype.buildSelectionform = function () {
+	const selections = this.getSelections();
+	const form = document.createElement('form');
+ form.setAttribute('onsubmit', 'injector.formSubmit(e)');
+	for (const selection of selections) {
+		let brk = document.createElement('br');
+		let inp = document.createElement('input');
+		inp.setAttribute('type', 'checkbox');
+		inp.setAttribute('value', selection.name);
+		inp.setAttribute('id', selection.name);
+		let lab = document.createElement('label');
+		lab.setAttribute('for', selection.name);
+		lab.innerHTML = selection.name;
+		form.appendChild(inp);
+		form.appendChild(lab);
+		form.appendChild(brk);
+	}
+	let btn = document.createElement('button');
+	btn.setAttribute('value', 'submit');
+	btn.innerHTML = 'Submit';
+	form.appendChild(btn);
+	console.log('form = ');
+	console.log(form);
+	return form;
+};

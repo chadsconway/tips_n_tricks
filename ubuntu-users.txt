@@ -1,0 +1,16 @@
+All users in password file:
+
+$ less /etc/passwd
+
+To exit less:
+
+$ q
+
+Just account names:
+
+$ awk -F: '{ print $1}' /etc/passwd
+
+Also:
+
+$ getent passwd
+

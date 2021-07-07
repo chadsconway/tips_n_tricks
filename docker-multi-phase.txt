@@ -1,0 +1,5 @@
+Multi step docker builds:
+
+1.	Build Phase: Use node container to build app
+
+2.	Run Phase:  Start up another container and copy over the build directory

@@ -1,0 +1,46 @@
+Iterators are implementation of Iterable Objects including:
+	maps
+	arrays
+	strings
+Iterators enable iterating over objects using next()
+Iterators are objects that can be iterated through.
+
+Can verify if object conforms to iterable protocol using the built-in [Symbol.iterator]()
+
+Regulars Javascript Functions "run until return/end"
+
+Generators "run until yield / return /end "
+
+Generator functions
+	 once called return the 
+Generator Object 
+	which holds the entire 
+Generator Iterable 
+	that can be 
+iterated using next() or for...of loop
+
+Syntax for Generator:
+
+function* <name>
+
+Generator Object needs to be assigned to a variable to keep track of next() methods called on it.  If it isn't assigned to avariable then it will always yild only till first yield expression on every next()
+
+yield is a stopping point. 
+
+on next() the yield expression returns an object in form:
+{ value: '', done: '' }
+
+value = everything to the right of yield, can be a function call , object, etc
+
+done = boolean, if = true, the function has finished its run.
+
+EXAMPLES: 
+function* generatorFunction(i){
+	yield i;
+	yield i+1;
+}
+// create generator
+let generator = generatorFunction(5);
+// get value
+generator.next() // return {value: 5, done: false}
+generator.next() // return {value: 6, done: true}

@@ -1,0 +1,25 @@
+Step 2 — Executing the Docker Command Without Sudo (Optional)
+
+By default, the docker command can only be run the root user or by a user in the docker group, which is automatically created during Docker’s installation process. If you attempt to run the docker command without prefixing it with sudo or without being in the docker group, you’ll get an output like this:
+
+Output
+docker: Cannot connect to the Docker daemon. Is the docker daemon running on this host?.
+See 'docker run --help'.
+
+If you want to avoid typing sudo whenever you run the docker command, add your username to the docker group:
+
+    sudo usermod -aG docker ${USER}
+
+To apply the new group membership, log out of the server and back in, or type the following:
+
+    su - ${USER}
+
+You will be prompted to enter your user’s password to continue.
+
+Confirm that your user is now added to the docker group by typing:
+
+    id -nG
+
+Add user to group while not being logged in as that user:
+
+sudo usermod -aG docker username

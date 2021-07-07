@@ -1,0 +1,36 @@
+# adduser <name>
+
+Add sudo / root priv
+
+# usermod -aG sudo <name>
+
+Copy public Key to new user - do this on local machine
+
+$ ssh-copy-id <name>@<server ip address>
+
+	or manually install the key:
+
+On local machine:
+
+cat ~/.ssh/id_rsa.pub
+
+	select printed public key and copy to clipboard
+
+On the server as root:
+
+$ su - <name>
+
+in user's home directory:
+
+$ mkdir ~/.ssh
+
+$ chmod 700 ~/.ssh
+
+$ nano ~/.ssh/authorized_keys
+
+Paste key into nano, save, then:
+
+$ chmod 600 ~/.ssh/authorized_keys
+
+
+

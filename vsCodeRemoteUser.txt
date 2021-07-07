@@ -1,0 +1,5 @@
+user:  vsremote
+
+pswd:  vsc
+
+ip address for vs on DigitalOcean 167.71.124.254   // sf2

@@ -1,0 +1,34 @@
+middleware property - corresponds to middleware folder in scaffolding.  
+	Executes - server-side when page is loaded or refreshed
+	Executes - Client-side once app is mounted
+
+serverMiddleware - Express instance
+	Executes - Only on the server
+	Protects private date from exploitation
+
+To use serverMiddleware:
+
+~nuxt.config.js
+  },
+   serverMiddleware: ['~/api']
+ }
+
+in root:
+
+api/index.js
+
+Since we’ve added our API as serverMiddleware to Nuxt’s, we’ll need to add our directory to the config. We’ll add watch to our build object, and add the relative path from root.
+
+  */**
+   *** Build configuration*
+   **/*
+   build: {
+     watch: ['api'],
+     */**
+     *** You can extend webpack config here*
+     **/*
+     extend(config, ctx) {},
+   serverMiddleware: ['~/api']
+   }
+
+

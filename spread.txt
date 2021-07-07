@@ -1,0 +1,3 @@
+Using the spread syntax: The spread syntax is used in place where zero or more arguments are expected. It can be used with iterators that expands in place where there may not be a fixed number of expected arguments (like function parameters).
+
+The required function is called as given the arguments array using the spread syntax so that it would fill in the arguments of the function from the array.

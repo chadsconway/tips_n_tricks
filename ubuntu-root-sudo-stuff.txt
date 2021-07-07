@@ -1,0 +1,26 @@
+Accidentally changed default shell of root and couldn't login as root.
+
+Using winscp, opened:
+
+	/etc/passwd
+
+Seven fields for each entry, last entry default shell:
+
+it was:  root:x:0:0:root:/root:/git
+
+changed to default: root:x:0:0:root:/root:/bin/bash
+
+Fixed login issue, accidentally changed when trying to configure auto deployment from github to user git
+
+How to change prefix displayed at terminal:
+
+This default format lists the username, the hostname and then the current directory of the user. The bash picks up this configuration from the bashrc file that is set up individually for every user in their home directory. Here is how you can open this file:
+
+location:  /home/username/.bashrc
+
+The PS1 variable that you see in the above image has all the required configuration for the bash prompt. Let us first explain what the characters in this variable indicate. You can view this variable clearly in the PS1 variable listed after the else statement.
+
+    \u-This indicates the username of the current user
+    \h: This indicates the hostname of the current user extracted from the fully qualified domain name.
+    \w: This indicates the current working directory. Your home directory is indicated with a tilde ~ symbol.
+    \$: This indicates if you are a normal user ($) or a root user (#).

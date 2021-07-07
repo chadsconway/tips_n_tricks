@@ -1,0 +1,19 @@
+Since the task was to simply use another branch instead of master, you can simply remove master branch completely or rename it to let's say - legacy, then take another branch and rename it to master. That's it. Here are actual commands that you might need to execute to achieve the goal locally and on GitHub:
+
+git branch -m master legacy               # rename local master to legacy
+git checkout legacy
+git branch -m another_branch master       # another_branch will be our new master
+
+Locally we are done now. However you cannot simply remove master branch on GitHub. You need to take another branch as default first. This can be done in repository Settings > Default Branch. Once you do this, you can proceed:
+
+git push origin :master                   # remove master on GitHub
+git push origin master                    # push out our new master branch
+git push origin legacy                    # push our legacy branch too
+
+Then go back to Settings > Default Branch and switch default branch back to master. Additionally you can remove all extra branches that you might have created during migration process.
+
+Then in local:
+git checkout master
+git push -u origin master
+
+Should be set to track remote branch 'master' from 'origin'

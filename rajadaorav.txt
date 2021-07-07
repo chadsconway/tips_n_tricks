@@ -1,0 +1,28 @@
+                                   
+                                  ((()))
+				(((/^^\ ))) 
+ 				   \**/ ))))
+                                   -\/-^)))
+                ()                    ())))
+               ()()
+              ()()()
+             ()()()()
+     ()()()()()()()()()()()()
+       ()()()()()()()()()()
+         ()()()()()()()()
+           ()()()()()()
+           )()()()()()
+          ()()()() )())
+         )()()()    ()()
+        ()()()()      (()
+
+
+
+
+This is meant for the author/contributor rajaraodv ------ the article (link below) has become my bible, 
+so many pieces fell into place while reading it.  Succinct, illuminating, with useful examples that clarified not confused, so Zen ... i feel light 
+
+thank you for the levitation rajaraodv... best regards and namaste, chadley
+
+JavaScript Symbols, Iterators, Generators, Async/Await, and Async Iterators — All Explained Simply
+https://www.freecodecamp.org/news/some-of-javascripts-most-useful-features-can-be-tricky-let-me-explain-them-4003d7bbed32/

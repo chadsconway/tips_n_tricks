@@ -1,0 +1,3 @@
+which version of raspbian am I using:
+
+$ lsb_release -a

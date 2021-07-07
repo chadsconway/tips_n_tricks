@@ -1,0 +1,11 @@
+Ceramic Capacitors better suited for 
+	Class 1 good for oscillators
+	Class 2 good for decoupling
+
+Film Capacitor  better suited for medium freq 3 - 3 MHz
+
+
+Electrolytic Capacitor better suited for low freq < 3 Hz
+	Use for smoothing and buffering Energy but not decoupling
+
+Wurth Electronics Group

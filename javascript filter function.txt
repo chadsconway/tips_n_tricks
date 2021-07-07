@@ -1,0 +1,4 @@
+Javascript filter function:
+
+let filteredData = datas.filter(data => data.someSelectionCriteriaParameter)
+

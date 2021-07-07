@@ -1,0 +1,34 @@
+yum update
+
+yum install <package>
+
+Find package:
+
+yum list <package>
+
+Software groups of packages:L
+
+yum grouplist
+
+yum groupinstall <groupname>
+
+List of packages in a group:
+
+yum groupinfo <groupname>
+
+Repositories:
+	EPEL:  yum --enablerepo=extras install epel-release
+	nux-dextop multimedia packages
+	ElRepo hardware support and network drivers
+
+	CAUTION:  Don't update CentOS packages with 3rd Party Repo packages
+		because they may contain breaking changes.  Use:
+
+	Priorities:  Package ranking plugin with '1' Highest Priority
+						'99' Lowest Priority
+		Higher priority packages can't be overwritten with lower 	
+		priority packages.
+
+	http://wiki.centos.org/PackageManagement/Yum/Priorities
+
+

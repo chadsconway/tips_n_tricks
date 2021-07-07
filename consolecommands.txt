@@ -1,0 +1,16 @@
+Console.log alternatives:
+
+console.dir()
+
+console.table()
+
+console.assert() - same as console.log only if 1st argument is false
+
+console.count()
+
+console.trace()
+
+console.time()
+
+console.group()
+

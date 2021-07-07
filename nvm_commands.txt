@@ -1,0 +1,40 @@
+Show installed versions:
+
+$ nvm list
+
+Show versions available for install:
+
+$ nvm list available
+
+Install a specific version:
+
+$ nvm install <version> <arch - 32 or 64>
+
+Use a Specific Version
+
+$ nvm use <version>
+
+Remove a version
+
+$ nvm remove <version>
+
+
+### DEPRECATED COMMANDS ###
+
+install latest version: nvm install node
+
+use the latest version just installed: nvm use node
+
+install latest LTS version: nvm install --lts
+
+use LTS version:  nvm use --lts
+
+list available node versions to download:  nvm ls-remote
+
+list install versions:  nvm ls
+
+install specific version:  nvm install X.X.X
+
+set default version:  nvm alias default X.X.X
+
+use specific version:  nvm use X.X.X

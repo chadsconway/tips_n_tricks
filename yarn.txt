@@ -1,0 +1,10 @@
+Issues with Dependencies, helpful commands:
+Trying to update nuxt, directions said delete yarn.lock
+Afterwards, 
+$ yarn install
+did not generate new lock file
+$ yarn generate-lock-entry
+should
+$ yarn check  // package.json vs yarn.lock
+$ yarn check --integrity  // checks against hashes
+$ yarn check --verify-tree  // checks to make sure package.json = node_modules

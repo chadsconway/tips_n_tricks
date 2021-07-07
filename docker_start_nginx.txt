@@ -1,0 +1,2 @@
+Docker start nginx and expose port 80:
+$ sudo docker run --name docker-nginx -p 80:80 nginx

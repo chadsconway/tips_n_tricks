@@ -1,0 +1,4 @@
+coffeescript_and_packages_for_usage
+
+CSON: npm i cson
+coffeescript: npm i --save-dev coffeescript

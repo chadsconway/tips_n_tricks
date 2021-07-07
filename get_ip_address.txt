@@ -1,0 +1,11 @@
+get ip address:
+
+Try typing this at your server’s command prompt:
+
+    ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
+
+You will get back a few lines. You can try each in your web browser to see if they work.
+
+An alternative is typing this, which should give you your public IP address as seen from another location on the internet:
+
+    curl -4 icanhazip.com

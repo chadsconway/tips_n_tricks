@@ -1,0 +1,3 @@
+display all the chmod permissions in a file path:
+
+$ namei -om /path/to/check

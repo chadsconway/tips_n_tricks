@@ -1,0 +1,43 @@
+
+Running concurrent scripts:
+
+"scripts": {
+    "start": "react-scripts start",
+    "dev": "(cd server && npm run start) & npm run start"
+  }
+
+comments:  && means npm waits for first command before running second
+
+------------------------------------------------------------
+Running concurrent scripts using:
+
+$ npm install concurrently
+
+"scripts": {
+    "start": "react-scripts start",
+    "dev": ""concurrently \"cd server && npm run start\" \"npm run start\""
+  }
+
+------------------------------------------------------------
+Running concurrent scripts using:
+
+$ npm install npm-run-all — save-dev
+
+comments: three different commands, based on your needs:
+
+    npm-run-all (the main command, which has documentation on all of the flags and additions you can pass in via the command line)
+    run-s (run sequential — for when you need one command to finish before the next one starts)
+    run-p (run parallel — like when both the UI and server pieces of the application need to run side by side).
+
+If, for example, the package.json scripts looked like the following:
+
+{
+    "scripts": {
+        "clean": "rimraf dist",
+        "lint":  "eslint src",
+        "build": "babel src -o lib"
+    }
+}
+
+npm-run-all: npm-run-all clean lint build.
+

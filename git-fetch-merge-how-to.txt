@@ -1,0 +1,5 @@
+pull entire repo:
+
+$ git fetch origin	// checkout repo NOT just branch
+
+$ git merge origin/branch //merges into checked out branch

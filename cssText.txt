@@ -1,0 +1,8 @@
+cssText
+
+
+Syntax:@@get@@
+  object.style.cssText;
+
+Syntax:@@set@@
+  object.style.cssText = <string>

@@ -1,0 +1,3 @@
+Get Octal notation file permissions:
+
+stat -c "%a %n" <file path and name>

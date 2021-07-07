@@ -1,0 +1,100 @@
+Setup git user and git shell with user only having access to git-shell
+
+Step 1: Setup an Ubuntu 18.04 server
+
+There are quite a few ways you can do this however I prefer to have the server accessible on the Internet so I can sync my computer(s) while I’m traveling. Check out my previous post “First steps to securing Ubuntu Server 18.04 on Digital Ocean” if you want some pointers. Then, ssh into your server.
+Step 2: Install git and git-shell
+
+We’ll create a new user and restrict that user to a git-only shell. So let’s first make sure we have the necessary software installed and up to date.
+
+Update your package list
+
+$ sudo apt update
+
+Install git
+
+$ sudo apt install git
+
+See if git-shell is already setup in /etc/shells
+
+$ cat /etc/shells
+# /etc/shells: valid login shells
+/bin/sh
+/bin/bash
+/bin/rbash
+/bin/dash
+/usr/bin/tmux
+/usr/bin/screen
+
+If you don’t see git-shell listed, find out it’s location
+
+$ which git-shell
+/usr/bin/git-shell
+
+and add it to /etc/shells
+
+$ sudo vim /etc/shells  # and add the path to git-shell from last command
+
+Step 3: Setup a dedicated (non-sudo) git user
+
+You don’t want to run the git server under your user (especially if you are in the superuser group) so let’s create a user dedicated for git access.
+
+Create git user
+
+$ sudo adduser --disabled-password git
+
+Switch to git user
+
+$ sudo su git
+
+Change to git user’s home directory
+
+$ cd
+
+Make directory for ssh files
+
+$ mkdir ~/.ssh && chmod 700 ~/.ssh
+
+and create the authorized keys file
+
+$ touch ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys
+
+And add the public keys of any users you want to access your private git server
+
+$ vim ~/.ssh/authorized_keys	
+
+Finally let’s set the git user’s shell to the git-shell
+
+$ sudo chsh git -s $(which git-shell)
+
+Step 4: Create individual repo directories
+
+For each repo you want to host, you need to create a directory for the files and properly set permissions. We use sudo for this since you cannot su - git as the git user’s shell is set to the non-interactive git-shell.
+
+First let’s change to the git user’s home directory
+
+$ cd /home/git
+
+Then we’ll create the repo directory
+
+$ sudo mkdir ios-backup-extractor.git
+
+Next init the git repo
+
+$ cd ios-backup-extractor.git && sudo git init --bare && cd ..
+
+and then change the ownership of the directories and files to git
+
+$ sudo chown -R git.git ios-backup-extractor.git/
+
+Step 5: Use your private git repo
+
+You’re all set to use your private git repos now! If you are not that familiar with git, there’s a lot of great documentation online and it’s far too much to cover in this post. But here are a few commands that might be helpful as you use your new private git server.
+
+To clone a new repo you initialized on your private git server
+
+$ git clone git@<IPADDRESS>:<repo-name> ~/git/
+
+To add your new private git server to an existing repo
+
+$ git remote add origin git@<IPADDRESS>:<repo-name>.git

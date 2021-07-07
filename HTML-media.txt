@@ -1,0 +1,63 @@
+HTML Media:
+
+
+Video:
+
+Only MP4, WebM, and Ogg video are supported by the HTML5 standard.
+
+Audio:
+
+Only MP3, WAV, and Ogg audio are supported by the HTML5 standard.
+
+The HTML <video> Element
+
+To show a video in HTML, use the <video> element:
+Example
+<video width="320" height="240" controls>
+  <source src="movie.mp4" type="video/mp4">
+  <source src="movie.ogg" type="video/ogg">
+Your browser does not support the video tag.
+</video> 
+
+The controls attribute adds video controls, like play, pause, and volume.
+
+It is a good idea to always include width and height attributes. If height and width are not set, the page might flicker while the video loads.
+
+The <source> element allows you to specify alternative video files which the browser may choose from. The browser will use the first recognized format.
+
+The text between the <video> and </video> tags will only be displayed in browsers that do not support the <video> element.
+
+The autoplay attribute does not work in mobile devices like iPad and iPhone.
+
+HTML5 Video Tags
+Tag 	Description
+<video> 	Defines a video or movie
+<source> 	Defines multiple media resources for media elements, such as <video> and <audio>
+<track> 	Defines text tracks in media players
+
+
+The HTML <audio> Element
+
+To play an audio file in HTML, use the <audio> element:
+Example
+<audio controls>
+  <source src="horse.ogg" type="audio/ogg">
+  <source src="horse.mp3" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio> 
+
+HTML Audio - How It Works
+
+The controls attribute adds audio controls, like play, pause, and volume.
+
+The <source> element allows you to specify alternative audio files which the browser may choose from. The browser will use the first recognized format.
+
+The text between the <audio> and </audio> tags will only be displayed in browsers that do not support the <audio> element.
+
+HTML5 Audio Tags
+Tag 	Description
+<audio> 	Defines sound content
+<source> 	Defines multiple media resources for media elements, such as <video> and <audio>
+
+MPEG 	.mpg
+.mpeg 	MPEG. Developed by the Moving Pictures Expert Group. 

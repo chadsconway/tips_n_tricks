@@ -1,0 +1,25 @@
+Explore Your History with Git
+
+While working on your project it can be helpful to review your commit history. On GitHub.com, you can access your project history by selecting the commit button from the code tab on your project. Locally, you can use git log.
+
+The git log command enables you to display a list of all of the commits on your current branch. By default, the git log command presents a lot of information all at once.
+
+Use some of the git log modifiers to cultivate an easy-to-read list that provides some valuable information.
+
+    git log -10 will only show the 10 most recent commits.
+    git log --oneline is a great way to view commit history by displaying the first seven characters of the SHA-1 hash and commit message of the commits on the current branch.
+    git log --oneline --graph presents commit history in a ASCII graph displaying the different branches in the repository and their commits.
+    git log --oneline --graph --decorate displays the same ASCII graph that is displayed using the --graph modifier, but also includes the branch name(s) for the different commits being displayed.
+
+Compare Versions of Files
+
+As you prepare to craft that perfect commit, viewing the differences between what is currently in your working directory and staging area helps you git add the right files to your commit.
+
+By default, the git diff command helps you review the changes between the last commit of your project and the various states of your files (for example, those in the working directory or your staging area). 
+
+Diagram of the git diff options for comparing the changes in the working directory, staging area, and history.
+
+You can also use git diff to compare between any two commits, branches, or tags in the repository. For example, to compare two commits with SHA-1 hash references 4e3dc9b and 0cd75d4, enter command: git diff 4e3dc9b 0cd75d4
+
+Finally, if you would like to view the changes that were made in a previous commit, you can use the git show <SHA-1> command to display the details of that specific commit. It includes things like commit author, time and date of the commit, and a list of the changes that were made to the various assets within the repository.
+

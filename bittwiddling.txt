@@ -1,0 +1,42 @@
+int flags = 0b00000000
+
+int flag0 = 0b00000001
+
+set bit
+
+flags |= flag0
+
+flags 0b00010000
+OR
+flag0 0b00000001
+----------------
+      0b00010001
+
+
+
+
+
+
+clear bit
+
+flags &= ~flag0
+
+flags 	  0b00010001
+AND
+
+NOT flag0 0b11111110
+---------------------
+	  0b00010000
+
+
+flip bit
+
+To toggle a bit state, we use bitwise XOR:
+
+flags ^= flag0
+
+flags 0b00010001  flags 0b00010000
+XOR
+flag0 0b00010001  flag0 0b00010001
+---------------------------------
+      0b00010000        0b00010001

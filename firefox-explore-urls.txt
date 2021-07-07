@@ -1,0 +1,9 @@
+about:addons
+about:preferences#general<enter> in the address bar.
+about:home (Firefox default home page),
+about:newtab (shows the sites most visited),
+about:blank (a blank page),
+
+Start Firefox in Safe Mode {web Link} by holding down the <Shift>
+ (Mac=Options)   key, and then starting Firefox.
+A small dialog should appear. Click Start In Safe Mode (not Refresh).

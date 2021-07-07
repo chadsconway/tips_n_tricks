@@ -1,0 +1,337 @@
+CSS Shadow Parts Editor’s Draft, 15 October 2019 Specification Metadata
+Copyright © 2019 W3C® (MIT, ERCIM, Keio, Beihang). W3C liability, trademark and
+permissive document license rules apply. Abstract This specification defines the
+::part() pseudo-element on shadow hosts, allowing shadow hosts to selectively
+expose chosen elements from their shadow tree to the outside page for styling
+purposes. CSS is a language for describing the rendering of structured documents
+(such as HTML and XML) on screen, on paper, etc. Status of this document This is
+a public copy of the editors’ draft. It is provided for discussion only and may
+change at any moment. Its publication here does not imply endorsement of its
+contents by W3C. Don’t cite this document other than as work in progress. GitHub
+Issues are preferred for discussion of this specification. When filing an issue,
+please put the text “css-shadow-parts” in the title, preferably like this:
+“[css-shadow-parts] …summary of comment…”. All issues and comments are archived,
+and there is also a historical archive. This document was produced by the CSS
+Working Group. This document was produced by a group operating under the W3C
+Patent Policy. W3C maintains a public list of any patent disclosures made in
+connection with the deliverables of the group; that page also includes
+instructions for disclosing a patent. An individual who has actual knowledge of
+a patent which the individual believes contains Essential Claim(s) must disclose
+the information in accordance with section 6 of the W3C Patent Policy. This
+document is governed by the 1 March 2019 W3C Process Document. Table of Contents
+1 Introduction 1.1 Motivation 2 Exposing a Shadow Element: 2.1 Naming a Shadow
+Element: the part attribute 2.2 Forwarding a Shadow Element: the exportparts
+attribute 3 Selecting a Shadow Element: the ::part() pseudo-element 4 Extensions
+to the Element Interface 5 Microsyntaxes for parsing 5.1 Rules for parsing part
+mappings 5.2 Rules for parsing a list of part mappings Conformance Document
+conventions Conformance classes Requirements for Responsible Implementation of
+CSS Partial Implementations Implementations of Unstable and Proprietary Features
+Implementations of CR-level Features Index Terms defined by this specification
+Terms defined by reference References Normative References IDL Index Issues
+Index 1. Introduction Shadow DOM allows authors to separate their page into
+"components", subtrees of markup whose details are only relevant to the
+component itself, not the outside page. This reduces the chance of a style meant
+for one part of the page accidentally over-applying and making a different part
+of the page look wrong. However, this styling barrier also makes it harder for a
+page to interact with its components when it actually wants to do so. This
+specification defines the ::part() pseudo-element, which allows an author to
+style specific, purposely exposed elements in a shadow tree from the outside
+page’s context. In combination with custom properties, which let the outside
+page pass particular values (such as theme colors) into the component for it to
+do with as it will, these pseudo-elements allow components and the outside page
+to interact in safe, powerful ways, maintaining encapsulation without
+surrendering all control. 1.1. Motivation For custom elements to be fully useful
+and as capable as built-in elements it should be possible for parts of them to
+be styled from outside. Exactly what can be styled from outside should be
+controlled by the element author. Also, it should be possible for a custom
+element to present a stable "API" for styling. That is, the selector used to
+style a part of a custom element should not expose or require knowledge of the
+internal details of the element. The custom element author should be able to
+change the internal details of the element while leaving the selectors
+untouched. The previous proposed method for styling inside the shadow tree, the
+>>> combinator, turned out to be too powerful for its own good; it exposed too
+much of a component’s internal structure to scrutiny, defeating some of the
+encapsulation benefits that using Shadow DOM brings. For this, and other
+performance-related reasons, the >>> combinator was eventually removed from the
+live profile. This left us with using custom properties as the only way to style
+into a shadow tree: the component would advertise that it uses certain custom
+properties to style its internals, and the outer page could then set those
+properties as it wished on the shadow host, letting inheritance push the values
+down to where they were needed. This works very well for many simple theming
+use-cases. However, there are some cases where this falls down. If a component
+wishes to allow arbitrary styling of something in its shadow tree, the only way
+to do so is to define hundreds of custom properties (one per CSS property they
+wish to allow control of), which is obviously ridiculous for both usability and
+performance reasons. The situation is compounded if authors wish to style the
+component differently based on pseudo-classes like :hover; the component needs
+to duplicate the custom properties used for each pseudo-class (and each
+combination, like :hover:focus, resulting in a combinatorial explosion). This
+makes the usability and performance problems even worse. We introduce ::part()
+to handle this case much more elegantly and performantly. Rather than bundling
+everything into custom property names, the functionality lives in selectors and
+style rule syntax, like it’s meant to. This is far more usable for both
+component authors and component users, should have much better performance, and
+allows for better encapsulation/API surface. It’s important to note that
+::part() offers absolutely zero new theoretical power. It is not a rehash of the
+>>> combinator, it is simply a more convenient and consistent syntax for
+something authors can already do with custom properties. By separating out the
+explicitly "published" parts of an element (the part element map) from the
+sub-parts that it merely happens to contain, it also helps with encapsulation,
+as authors can use ::part() without fear of accidental over-styling. 2. Exposing
+a Shadow Element: Elements in a shadow tree may be exported for styling by
+stylesheets outside the tree using the part and exportparts attributes. Each
+element has a part name list which is an ordered set of tokens. Each element has
+a forwarded part name list which is a list of pairs containing a string for the
+inner part being forwarded and a string giving the name it will be exposed as.
+Each shadow root can be thought of as having a part element map with keys that
+are strings and values that are ordered sets of elements. The part element map
+is described only as part of the algorithm for calculating style in this spec.
+It is not exposed via the DOM, as calculating it may be expensive and exposing
+it could allow access to elements inside closed shadow roots. Part element maps
+are affected by the addition and removal of elements and changes to the part
+name lists and forwarded part name lists of elements in the DOM. To calculate
+the part element map of a shadow root, outerRoot: For each descendant el within
+outerRoot: For each name in el’s part name list, append el to outerRoot’s part
+element map[name]. If el is a shadow host itself then let innerRoot be its
+shadow root. Calculate innerRoot’s part element map. For each
+innerName/outerName in el’s forwarded part name list: Let innerParts be
+innerRoot’s part element map[innerName] Append the elements in innerParts to
+outerRoot’s part element map[outerName] 2.1. Naming a Shadow Element: the part
+attribute Any element in a shadow tree can have a part attribute. This is used
+to expose the element outside of the shadow tree. The part attribute is parsed
+as a space-separated list of tokens representing the part names of this element.
+Note: It’s okay to give a part multiple names. The "part name" should be
+considered similar to a class, not an id or tagname.
+
+<style>
+	c-e::part(textspan) {
+		color: red;
+	}
+</style>
+
+<template id="c-e-template">
+	<span part="textspan">This text will be red</span>
+</template>
+<c-e></c-e>
+<script>
+	// Add template as custom element c-e
+	...
+</script>
+
+2.2. Forwarding a Shadow Element: the exportparts attribute Any element in a
+shadow tree can have a exportparts attribute. If the element is a shadow host,
+this is used to allow styling of parts from hosts inside the shadow tree by
+rules outside this the shadow tree (as if they were elements in the same tree as
+the host, named by a part attribute). The exportparts attribute is parsed as a
+comma-separated list of part mappings. Each part mapping is one of: innerIdent :
+outerIdent Adds innerIdent/outerIdent to el’s forwarded part name list. ident
+Adds ident/ident to el’s forwarded part name list. Note: This is shorthand for
+ident : ident. anything else Ignored for error-recovery / future compatibility.
+Note: It’s okay to map a sub-part to several names.
+
+<style>
+	c-e-inner-template::part(innerspan) {
+		color: red;
+	}
+</style>
+
+<template id="c-e-outer-template">
+	<c-e-inner-template exportparts="innerspan: textspan"></c-e-inner-template>
+</template>
+
+<template id="c-e-inner-template">
+	<span part="innerspan">
+		This text will be red because the containing shadow host forwards innerspan
+		to the document as "textspan" and the document style matches it.
+	</span>
+	<span part="textspan">
+		This text will not be red because textspan in the document style cannot
+		match against the part inside the inner custom element if it is not
+		forwarded.
+	</span>
+</template>
+
+<c-e></c-e>
+<script>
+	// Add template as custom elements c-e-inner, c-e-outer
+	  ...
+</script>
+
+3. Selecting a Shadow Element: the ::part() pseudo-element The ::part()
+pseudo-element allows you to select elements that have been exposed via a part
+attribute. The syntax is: ::part() = ::part(
+<ident
+	>+ ) The ::part() pseudo-element only matches anything when the originating
+	element is a shadow host. If the originating element’s shadow root’s part
+	element map contains all of the specified
+	<ident
+		>s, ::part() matches the element or elements keyed to that
+		<ident
+			>. Otherwise, it matches nothing. For example, if you have a custom button
+			that contains a "label" element that is exposed for styling (via
+			part="label"), you can select it with #the-button::part(label). Part names
+			act similarly to classes: multiple elements can have the same part name,
+			and a single element can have multiple part names. A tabstrip control
+			might have multiple elements with part="tab", all of which are selected by
+			::part(tab). If a single tab is active at a time, it can be specially
+			indicated with part="tab active" and then selected by ::part(tab active)
+			(or ::part(active tab), as order doesn’t matter). The ::part()
+			pseudo-element can take additional pseudo-classes after it, such as
+			x-button::part(label):hover, but never matches the structural
+			pseudo-classes or any other pseudo-classes that match based on tree
+			information rather than local element information. The ::part()
+			pseudo-element can also take additional pseudo-elements after it, such as
+			x-button::part(label)::before, but never match additional ::part()s. For
+			example, x-panel::part(confirm-button)::part(label) never matches
+			anything. This is because doing so would expose more structural
+			information than is intended. If the
+			<x-panel
+				>’s internal confirm button had used something like part="label =>
+				confirm-label" to forward the button’s internal parts up into the
+				panel’s own part element map, then a selector like
+				x-panel::part(confirm-label) would select just the one button’s label,
+				ignoring any other labels. 4. Extensions to the Element Interface
+				partial interface Element { [SameObject, PutForwards=value] readonly
+				attribute DOMTokenList part ; }; The part attribute’s getter must return
+				a DOMTokenList object whose associated element is the context object and
+				whose associated attribute’s local name is part. The token set of this
+				particular DOMTokenList object are also known as the element’s parts.
+				Define this as a superglobal in the DOM spec.
+				<https://github.com/w3c/csswg-drafts/issues/3424> 5. Microsyntaxes for
+				parsing 5.1. Rules for parsing part mappings A valid part mapping is a
+				pair of tokens separated by a U+003A COLON character and any number of
+				space characters before or after the U+003A COLON The tokens must not
+				contain U+003A COLON or U+002C COMMA characters. The rules for parsing a
+				part mapping are as follows: Let input be the string being parsed. Let
+				position be a pointer into input, initially pointing at the start of the
+				string. Collect a sequence of code points that are space characters
+				Collect a sequence of code points that are not space characters or
+				U+003A COLON characters, and let first token be the result. If first
+				token is empty then return error. Collect a sequence of code points that
+				are space characters. If the end of the input has been reached, return
+				the pair first token/first token If character at position is not a
+				U+003A COLON character, return error. Consume the U+003A COLON
+				character. Collect a sequence of code points that are space characters.
+				Collect a sequence of code points that are not space characters or
+				U+003A COLON characters. and let second token be the result. If second
+				token is empty then return error. Collect a sequence of code points that
+				are space characters. If position is not past the end of input then
+				return error. Return the pair first token/second token. 5.2. Rules for
+				parsing a list of part mappings A valid list of part mappings is a
+				number of valid part mappings separated by a U+002C COMMA character and
+				any number of space characters before or after the U+002C COMMA The
+				rules for parsing a list of part mappings are as follow: Let input be
+				the string being parsed. Split the string input on commas. Let unparsed
+				mappings be the resulting list of strings. Let mappings be an initially
+				empty list of pairs of tokens. This list will be the result of this
+				algorithm. For each string unparsed mapping in unparsed mappings, run
+				the following substeps: If unparsed mapping is empty or contains only
+				space characters, continue to the next iteration of the loop. Let
+				mapping be the result of parsing unparsed mapping using the rules for
+				parsing part mappings. If mapping is an error then continue to the next
+				iteration of the loop. This allows clients to skip over new syntax that
+				is not understood. Append mapping to mappings. Conformance Document
+				conventions Conformance requirements are expressed with a combination of
+				descriptive assertions and RFC 2119 terminology. The key words “MUST”,
+				“MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
+				“RECOMMENDED”, “MAY”, and “OPTIONAL” in the normative parts of this
+				document are to be interpreted as described in RFC 2119. However, for
+				readability, these words do not appear in all uppercase letters in this
+				specification. All of the text of this specification is normative except
+				sections explicitly marked as non-normative, examples, and notes.
+				[RFC2119] Examples in this specification are introduced with the words
+				“for example” or are set apart from the normative text with
+				class="example", like this: This is an example of an informative
+				example. Informative notes begin with the word “Note” and are set apart
+				from the normative text with class="note", like this: Note, this is an
+				informative note. Advisements are normative sections styled to evoke
+				special attention and are set apart from other normative text with
+				<strong class="advisement"
+					>, like this: UAs MUST provide an accessible alternative. Conformance
+					classes Conformance to this specification is defined for three
+					conformance classes: style sheet A CSS style sheet. renderer A UA that
+					interprets the semantics of a style sheet and renders documents that
+					use them. authoring tool A UA that writes a style sheet. A style sheet
+					is conformant to this specification if all of its statements that use
+					syntax defined in this module are valid according to the generic CSS
+					grammar and the individual grammars of each feature defined in this
+					module. A renderer is conformant to this specification if, in addition
+					to interpreting the style sheet as defined by the appropriate
+					specifications, it supports all the features defined by this
+					specification by parsing them correctly and rendering the document
+					accordingly. However, the inability of a UA to correctly render a
+					document due to limitations of the device does not make the UA
+					non-conformant. (For example, a UA is not required to render color on
+					a monochrome monitor.) An authoring tool is conformant to this
+					specification if it writes style sheets that are syntactically correct
+					according to the generic CSS grammar and the individual grammars of
+					each feature in this module, and meet all other conformance
+					requirements of style sheets as described in this module. Requirements
+					for Responsible Implementation of CSS The following sections define
+					several conformance requirements for implementing CSS responsibly, in
+					a way that promotes interoperability in the present and future.
+					Partial Implementations So that authors can exploit the
+					forward-compatible parsing rules to assign fallback values, CSS
+					renderers must treat as invalid (and ignore as appropriate) any
+					at-rules, properties, property values, keywords, and other syntactic
+					constructs for which they have no usable level of support. In
+					particular, user agents must not selectively ignore unsupported
+					property values and honor supported values in a single multi-value
+					property declaration: if any value is considered invalid (as
+					unsupported values must be), CSS requires that the entire declaration
+					be ignored. Implementations of Unstable and Proprietary Features To
+					avoid clashes with future stable CSS features, the CSSWG recommends
+					following best practices for the implementation of unstable features
+					and proprietary extensions to CSS. Implementations of CR-level
+					Features Once a specification reaches the Candidate Recommendation
+					stage, implementers should release an unprefixed implementation of any
+					CR-level feature they can demonstrate to be correctly implemented
+					according to spec, and should avoid exposing a prefixed variant of
+					that feature. To establish and maintain the interoperability of CSS
+					across implementations, the CSS Working Group requests that
+					non-experimental CSS renderers submit an implementation report (and,
+					if necessary, the testcases used for that implementation report) to
+					the W3C before releasing an unprefixed implementation of any CSS
+					features. Testcases submitted to W3C are subject to review and
+					correction by the CSS Working Group. Further information on submitting
+					testcases and implementation reports can be found from on the CSS
+					Working Group’s website at http://www.w3.org/Style/CSS/Test/.
+					Questions should be directed to the public-css-testsuite@w3.org
+					mailing list. Index Terms defined by this specification calculate the
+					part element map, in §2 exportparts, in §2.2 forwarded part name list,
+					in §2 ::part(), in §3 part attribute for Element, in §4 element-attr
+					for html-global, in §2.1 part element map, in §2 part name list, in §2
+					valid list of part mappings, in §5.2 valid part mapping, in §5.1 Terms
+					defined by reference [css-values-4] defines the following terms: +
+					<ident>
+						[css-variables-1] defines the following terms: custom property [DOM]
+						defines the following terms: DOMTokenList Element descendant shadow
+						host shadow root shadow tree value [INFRA] defines the following
+						terms: append collect a sequence of code points contain list ordered
+						set pair string [selectors-4] defines the following terms: :hover
+						live profile originating element structural pseudo-classes [WebIDL]
+						defines the following terms: PutForwards SameObject References
+						Normative References [CSS-VALUES-4] Tab Atkins Jr.; Elika Etemad.
+						CSS Values and Units Module Level 4. 31 January 2019. WD. URL:
+						https://www.w3.org/TR/css-values-4/ [CSS-VARIABLES-1] Tab Atkins
+						Jr.. CSS Custom Properties for Cascading Variables Module Level 1. 3
+						December 2015. CR. URL: https://www.w3.org/TR/css-variables-1/ [DOM]
+						Anne van Kesteren. DOM Standard. Living Standard. URL:
+						https://dom.spec.whatwg.org/ [INFRA] Anne van Kesteren; Domenic
+						Denicola. Infra Standard. Living Standard. URL:
+						https://infra.spec.whatwg.org/ [RFC2119] S. Bradner. Key words for
+						use in RFCs to Indicate Requirement Levels. March 1997. Best Current
+						Practice. URL: https://tools.ietf.org/html/rfc2119 [SELECTORS-4]
+						Elika Etemad; Tab Atkins Jr.. Selectors Level 4. 21 November 2018.
+						WD. URL: https://www.w3.org/TR/selectors-4/ [WebIDL] Boris Zbarsky.
+						Web IDL. 15 December 2016. ED. URL: https://heycam.github.io/webidl/
+						IDL Index partial interface Element { [SameObject,
+						PutForwards=value] readonly attribute DOMTokenList part; }; Issues
+						Index Define this as a superglobal in the DOM spec.
+						<https://github.com/w3c/csswg-drafts/issues/3424> ↵
+					</ident></strong
+				></x-panel
+			></ident
+		></ident
+	></ident
+>

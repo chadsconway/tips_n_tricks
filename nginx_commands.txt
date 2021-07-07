@@ -1,0 +1,11 @@
+Enable nginx to start with boot:
+
+$ sudo systemctl enable nginx
+
+Test nginx:
+
+$ sudo nginx -t
+
+Restart nginx:
+
+$ sudo systemctl restart nginx

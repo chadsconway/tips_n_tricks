@@ -1,0 +1,13 @@
+In Svelte can do this with the component lifecycls onMount:
+<input name="nameEl"/>
+onMount(() => autofocus && nameEl.focus())    // if autofocus is true, we run nameEl.focus()
+
+Waiting for tick to update dom:
+import { tick } from 'svelte'
+async function onEdit() {
+  editing = true                        // enter editing mode
+  await tick()
+  nameEl.focus()
+}
+
+<input bind:value={name} bind:this={nameEl} type="text" id="todo-{todo.id}" autoComplete="off" class="todo-text" />

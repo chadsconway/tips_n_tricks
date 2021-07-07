@@ -1,0 +1,59 @@
+Forwarding parts You can explicitly forward a child’s part to be styleable
+outside of the parent’s shadow tree with the exportparts attribute. So in the
+previous example, to allow the some-box part to be styleable by x-bar’s parent,
+it would have to be exposed:
+
+<x-bar>
+	#shadow-root
+	<x-foo exportparts="some-box"></x-foo>
+</x-bar>
+
+The exportparts forwarding syntax has options a-plenty. 🙏 Feel free to skip
+these if you’re not interested in the minutiae of the syntax!
+exportparts="some-box some-input": explicitly forward x-foo’s parts that you
+know about (i.e. some-box and some-input) as they are. These selectors would
+match: x-bar::part(some-box) { ... } x-bar::part(some-input) { ... }
+exportparts="some-input: bar-input": explicitly forward (some) of x-foo’s parts
+(i.e. some-input) but rename them. These selectors would match:
+x-bar::part(bar-input) { ... } These selectors would not match:
+x-bar::part(some-box) { ... } x-bar::part(some-input) { ... }
+x-bar::part(bar-box) { ... } You can combine these, as well as add a part to
+x-foo itself (some-foo below. This means “style this particular x-foo, but not
+the other one, if you had more):
+
+<x-bar>
+	#shadow-root
+	<x-foo part="some-foo" exportparts="some-input: bar-input"></x-foo>
+</x-bar>
+
+The “all buttons in this app should be blue” 🎨 theming problem Given the above
+prefixing rules, to style all inputs in a document at once, you need to Ensure
+that all elements correctly forward their parts and Select all their parts. So
+given this shadow tree:
+
+<submit-form>
+	#shadow-root
+	<x-form exportparts="some-input some-box">
+		#shadow-root
+		<x-bar exportparts="some-input some-box">
+			#shadow-root
+			<x-foo exportparts="some-input some-box"></x-foo>
+		</x-bar>
+	</x-form>
+</submit-form>
+
+<x-form></x-form>
+<x-bar></x-bar>
+
+You can style all the inputs with: :root::part(some-input) { ... } 👉 This is a
+lot of effort on the element author, but easy on the theme user. If you hadn’t
+forwarded them with the same name and some-input was used at every level of the
+app (the non contrived example is just an
+<a>
+	tag that’s used in many shadow roots), then you’d have to write:
+	:root::part(form-bar-foo-some-input), :root::part(bar-foo-some-input,
+	:root::part(foo-some-input), :root::part(some-input) { ... } 👉 This is a lot
+	of effort on the theme user, but easy on the element author. Both of these
+	examples show that if an element author forgot to forward a part, then the app
+	can’t be themed correctly.</a
+>

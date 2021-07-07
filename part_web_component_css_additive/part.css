@@ -1,0 +1,6 @@
+c-e-inner-temp::part(innerspan) {
+	background-color: red;
+}
+c-e-outer-temp::part(textspan) {
+	color: yellow;
+}

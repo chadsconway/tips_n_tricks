@@ -1,0 +1,7 @@
+ <link rel="stylesheet"
+            type="text/css"
+            href="mdb/css/iconsvg.css">
+
+ <svg class="icon">
+            <use xlink:href="#pray" />
+        </svg>

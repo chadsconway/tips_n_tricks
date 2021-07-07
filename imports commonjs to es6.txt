@@ -1,0 +1,62 @@
+Only the “default export” is supported for CommonJS files or packages:
+
+import packageMain from 'commonjs-package'; // Works
+
+import { method } from 'commonjs-package'; // Errors
+
+CommonJS, JSON, and native modules
+#
+
+CommonJS, JSON, and native modules can be used with module.createRequire().
+
+// cjs.cjs
+module.exports = 'cjs';
+
+// esm.mjs
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
+const cjs = require('./cjs.cjs');
+cjs === 'cjs'; // true
+
+Builtin modules
+#
+
+Builtin modules will provide named exports of their public API. A default export is also provided which is the value of the CommonJS exports. The default export can be used for, among other things, modifying the named exports. Named exports of builtin modules are updated only by calling module.syncBuiltinESMExports().
+
+import EventEmitter from 'events';
+const e = new EventEmitter();
+
+import { readFile } from 'fs';
+readFile('./foo.txt', (err, source) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(source);
+  }
+});
+
+import fs, { readFileSync } from 'fs';
+import { syncBuiltinESMExports } from 'module';
+
+fs.readFileSync = () => Buffer.from('Hello, ESM');
+syncBuiltinESMExports();
+
+fs.readFileSync === readFileSync;
+
+Experimental JSON modules
+#
+
+Currently importing JSON modules are only supported in the commonjs mode and are loaded using the CJS loader. WHATWG JSON modules specification are still being standardized, and are experimentally supported by including the additional flag --experimental-json-modules when running Node.js.
+
+When the --experimental-json-modules flag is included both the commonjs and module mode will use the new experimental JSON loader. The imported JSON only exposes a default, there is no support for named exports. A cache entry is created in the CommonJS cache, to avoid duplication. The same object will be returned in CommonJS if the JSON module has already been imported from the same path.
+
+Assuming an index.mjs with
+
+import packageConfig from './package.json';
+
+The --experimental-json-modules flag is needed for the module to work.
+
+node index.mjs # fails
+node --experimental-json-modules index.mjs # works

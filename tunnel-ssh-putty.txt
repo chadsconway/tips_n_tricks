@@ -1,0 +1,13 @@
+Tunnel Through Putty:
+
+Load the SSH connection to the remote server but do not open.
+
+Append 'tunnel' to the save configuration name, then Save so that a new saved config is added
+
+in SSH->tunnels  specify:   SourcePort:  Port on this local machine that you want to be a tunnel to remote
+			    Destination: Port on the remote machine that you want to reach through tunnel
+
+click 'add', then 'save' session.
+
+Now open the session,  and in the local browser go to 'localhost:<source port you specified>'  This will open the 
+destination port from the remote server in your local browser

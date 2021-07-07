@@ -1,0 +1,5 @@
+location /nginx_status {
+			stub_status;
+			allow 157.230.197.231;
+			deny all:
+		}		

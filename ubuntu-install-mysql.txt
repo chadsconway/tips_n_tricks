@@ -1,0 +1,105 @@
+add user just for mysql ssh work:
+
+$ adduser sqluser
+
+password: csc1009
+
+Add sqluser to sudo
+
+$ usermod -aG sudo sqluser
+
+install mysql
+
+$ sudo apt-get install mysql-server
+
+Access the mysql shell in terminal
+
+$ mysql -u root -p
+
+Enter mysql root password:
+
+$ csc1009 (not to be confused with root droplet passwd)
+
+
+Commands:
+
+SHOW DATABASES;
+
+CREATE DATABASE database name;
+
+DROP DATABASE database name;
+
+CREATE TABLE potluck (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+name VARCHAR(20),
+food VARCHAR(30),
+confirmed CHAR(1), 
+signup_date DATE);
+
+This command accomplishes a number of things:
+
+    It has created a table called potluck within the directory, events.
+    We have set up 5 columns in the table—id, name, food, confirmed, and signup date.
+    The “id” column has a command (INT NOT NULL PRIMARY KEY AUTO_INCREMENT) that automatically numbers each row.
+    The “name” column has been limited by the VARCHAR command to be under 20 characters long.
+    The “food” column designates the food each person will bring. The VARCHAR limits text to be under 30 characters.
+    The “confirmed” column records whether the person has RSVP’d with one letter, Y or N.
+    The “date” column will show when they signed up for the event. MySQL requires that dates be written as yyyy-mm-dd
+
+ DESCRIBE potluck;
+
+Use this format to insert information into each row:
+
+INSERT INTO `potluck` (`id`,`name`,`food`,`confirmed`,`signup_date`) VALUES (NULL, "John", "Casserole","Y", '2012-04-11');
+INSERT INTO `potluck` (`id`,`name`,`food`,`confirmed`,`signup_date`) VALUES (NULL, "Sandy", "Key Lime Tarts","N", '2012-04-14');
+INSERT INTO `potluck` (`id`,`name`,`food`,`confirmed`,`signup_date`) VALUES (NULL, "Tom", "BBQ","Y", '2012-04-18');
+INSERT INTO `potluck` (`id`,`name`,`food`,`confirmed`,`signup_date`) VALUES (NULL, "Tina", "Salad","Y", '2012-04-10'); 
+
+mysql> SELECT * FROM potluck;
++----+-------+----------------+-----------+-------------+
+| id | name  | food           | confirmed | signup_date |
++----+-------+----------------+-----------+-------------+
+|  1 | John  | Casserole      | Y         | 2012-04-11  |
+|  2 | Sandy | Key Lime Tarts | N         | 2012-04-14  |
+|  3 | Tom   | BBQ            | Y         | 2012-04-18  |
+|  4 | Tina  | Salad          | Y         | 2012-04-10  |
++----+-------+----------------+-----------+-------------+
+4 rows in set (0.00 sec)
+
+UPDATE `potluck` 
+SET 
+`confirmed` = 'Y' 
+WHERE `potluck`.`name` ='Sandy';
+
+ How to Add and Delete a Column
+
+We are creating a handy chart, but it is missing some important information: our attendees’ emails.
+
+We can easily add this:
+
+ ALTER TABLE potluck ADD email VARCHAR(40);
+
+However, if you need to place that column in a specific spot in the table, we can add one more phrase to the command.
+
+ ALTER TABLE potluck ADD email VARCHAR(40) AFTER name; 
+
+
+ How to Delete a Row
+
+If needed, you can also delete rows from the table with the following command:
+
+DELETE from [table name] where [column name]=[field text];
+
+For example, if Sandy suddenly realized that she will not be able to participate in the potluck after all, we could quickly eliminate her details.
+
+mysql> DELETE from potluck  where name='Sandy';
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM potluck;
++----+------+-----------+-----------+-------------+
+| id | name | food      | confirmed | signup_date |
++----+------+-----------+-----------+-------------+
+|  1 | John | Casserole | Y         | 2012-04-11  |
+|  3 | Tom  | BBQ       | Y         | 2012-04-18  |
+|  4 | Tina | Salad     | Y         | 2012-04-10  |
++----+------+-----------+-----------+-------------+
+3 rows in set (0.00 sec)

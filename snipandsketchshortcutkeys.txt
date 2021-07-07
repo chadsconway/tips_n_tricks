@@ -1,0 +1,2 @@
+open snip: win + shft + s
+open file explorer: win + e

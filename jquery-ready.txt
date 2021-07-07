@@ -1,0 +1,13 @@
+<script> 
+
+// Standard. 
+jQuery(document).ready(function () { alert('DOM is ready!'); }); 
+
+
+// Shortcut, but same thing as above. 
+jQuery(function () { alert('No really, the DOM is ready!'); }); 
+
+// Shortcut with fail-safe usage of $. Keep in mind that a reference 
+// to the jQuery function is passed into the anonymous function. 
+
+jQuery(function ($) { alert('Seriously it\'s ready!'); // Use $() without fear of conflicts

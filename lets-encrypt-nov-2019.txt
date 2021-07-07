@@ -1,0 +1,102 @@
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-18-04
+
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-18-04#prerequisites
+
+Using Certbot:
+
+Commands I entered:
+
+$ sudo add-apt-repository ppa:certbot/certbot
+
+$ sudo apt install python-certbot-nginx
+
+$ sudo certbot --nginx -d chadsconway.info -d www.chadsconway.info
+
+
+/etc/nginx/sites-available/chadsconway.info before using certbot
+
+server {
+
+	listen 80;
+	listen [::]:80;
+
+	server_name chadsconway.info www.chadsconway.info *.chadsconway.info;
+
+
+    location / {
+        proxy_pass http://localhost:3500;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/etc/nginx/sites-available/chadsconway.info after using certbot
+
+server {
+
+	server_name chadsconway.info www.chadsconway.info *.chadsconway.info;
+
+
+    location / {
+        proxy_pass http://localhost:3500;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/chadsconway.info/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/chadsconway.info/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+
+server {
+    if ($host = www.chadsconway.info) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = chadsconway.info) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+
+	listen 80;
+	listen [::]:80;
+
+	server_name chadsconway.info www.chadsconway.info *.chadsconway.info;
+    return 404; # managed by Certbot
+
+
+
+
+}

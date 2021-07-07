@@ -1,0 +1,59 @@
+isomorphic module boilerplate:
+
+Step 1 create JS source directory
+	
+$ mkdir js
+$ cd js
+
+Step 2 clone this module (and/or fork your own)
+
+$ git clone https://github.com/isysd-mirror/iso-module-boilerplate.git
+$ cd iso-module-boilerplate
+$ ls
+index.js  index.node.js  package.json  LICENSE  README.md  test.js
+$ ls ..
+iso-module-boilerplate
+
+Step 3 npm install
+
+$ npm install
+
+Summary:
+
+# List of files in parent (/js) directory now includes esm and iso-test
+# repositories from git, as well as their dependencies
+$ ls ..
+esm  iso-module-boilerplate  iso-test  is-wsl  open  tree-kill
+
+# Node_modules contains symbolic links to modules in parent directory
+$ ls -l node_modules/
+ esm -> ../../esm
+ iso-test -> ../../iso-test
+
+
+uses gpm (git + npm) so need to install:
+	$ yarn global add https://github.com/isysd-mirror/gpm#isysd
+	or
+	$ npm i -g https://github.com/isysd-mirror/gpm#isysd
+
+for reference:
+	after install gpm, npm can be used as normal 
+	since gpm is set in the preinstall hook in packag.json:
+	
+	gpm -n .. -t .. -u https -e -i
+	
+	which says 'install dependencies to .. using git not npm
+	This preinstall hook will install dependencies and 
+	devDendencies to the parent directory (..), preferring https to 		ssh as a git protocol
+
+	there is also a postinstall hook:
+	
+	try {
+ 	 require('../esm/esm.js')(module);
+	} catch (e) {
+  	 require('child_process')
+	  .execSync('npm i',{ cwd: require('path').join('..', 'esm')})
+	}
+	This script will check if esm is built, and run `npm i`
+	in ../esm if it is not.
+

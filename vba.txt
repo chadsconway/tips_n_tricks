@@ -1,0 +1,20 @@
+cell ref  [b5].<function>
+cell range [c1:c10]
+
+ENTER-DATA
+Range("a1:a10") = "Tutorials"
+
+Cells(row, col)when literal
+Range("a2:a10").Value
+
+COPY-PASTE
+// copy a1 into b1
+Range("a1") = Range("b1")
+Range("a1").Copy
+Range("a1").PasteSpecial
+// deselect cells
+Application.CutCopyMode = False
+
+INSERT INTO `products_categories` (`id`, `productid`, `catid`) VALUES (NULL, '6', '43');
+
+ catids{

@@ -1,0 +1,32 @@
+v-bind: binds ATTRIBUTE to EXPRESSION
+	Examples:  v-bind:href="url", v-bind:class="isActive", v-bind:style="isStyled", v-	bind:disabled="isDisabled"
+
+conditional rendering:  Actually adds and removes
+	v-if evaluates to true displays this
+	v-else display something else
+
+	v-show toggles visibility instead of removing - efficient for often changes
+
+style-binding:
+		This example updates the image:
+	<div class="color-box"
+		v-bind:style="{ backgroundColor: variant.variantColor }"
+		v-on:mousover="updateProduct(variant.variantImage)"
+
+		Other style binding example:
+		<h1 v-bind:style="{color: color}">
+
+		data: {
+			color: 'red'
+		}
+
+	Can also bind to style-object:
+		<h1 v-bind:style="styleObject">
+		data: {
+			styleObject: {
+				color: 'red',
+				fontSize: '13px'
+			}
+		}
+
+		I need to update the class:

@@ -1,0 +1,10 @@
+ playerVars: {
+        'autoplay': 1,
+        'controls': 0,
+        'enablejsapi': 1,
+        'loop': 1,
+        'playlist': 'y6m9xR_t4mU',
+        'rel': 0,
+        'start': 3,
+        'end': 6
+      },

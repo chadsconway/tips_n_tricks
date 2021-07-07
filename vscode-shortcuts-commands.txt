@@ -1,0 +1,6 @@
+
+Command Palette:	Ctrl + Shift + P
+
+Open markdown preview:	
+
+	Ctrl + Shift + P -> type 'markdown: open preview'

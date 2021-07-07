@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Shadow parts example</title>
+		<script src="part.js" defer></script>
+		<link rel="stylesheet" href="part.css" />
+	</head>
+	<body>
+		<h1>Shadow part styling for tabbed custom element</h1>
+
+		<div>
+			Not nested
+			<c-e-inner-temp></c-e-inner-temp>
+		</div>
+		<div>
+			Nested
+			<c-e-outer-temp> </c-e-outer-temp>
+		</div>
+	</body>
+</html>
+<style></style>
+
+<template id="c-e-inner-temp" exportparts="innerspan textspan">
+	<h1>c e inner temp</h1>
+	<span part="innerspan">
+		This text will be red because the containing shadow host forwards innerspan
+		to the document as "textspan" and the document style matches it.
+	</span>
+	<span part="textspan">
+		This text will not be red because textspan in the document style cannot
+		match against the part inside the inner custom element if it is not
+		forwarded.
+	</span>
+</template>
+<template id="c-e-outer-temp">
+	<h1>c e outer tem</h1>
+	<c-e-inner-temp exportparts="innerspan textspan"></c-e-inner-temp>
+</template>

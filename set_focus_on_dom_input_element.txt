@@ -1,0 +1,9 @@
+Regain focus on an <input> everytime Add button is pressed
+
+Need reference to the Dom node of the input
+
+use the focus attribute:
+
+<input name="inputElement">
+
+<button onclick="inputElement.focus()"

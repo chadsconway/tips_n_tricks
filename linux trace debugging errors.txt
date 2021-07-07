@@ -1,0 +1,6 @@
+bash script debugging:
+
+flag:  -x   show_execution_along_with_output
+example:  $ sudo bash -x dh_sys_info.sh
+
+flag:  -n   show_errors_only

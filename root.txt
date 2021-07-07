@@ -1,0 +1,36 @@
+Unlock bootloader
+
+install universal adb drivers
+
+open powershell in adb folder and copy twrp.img into folder
+
+commands:
+
+adb reboot bootloader
+
+fastboot flash recovery twrp.img 
+
+fastboot boot twrp.img 
+
+reboot and copy magisk and no verity into DCIM folder
+
+plug into computer
+
+commands
+
+adb reboot bootloader
+
+fastboot boot twrp.img - boot into twrp - click install - navigate to DCIM - intsall no verity - reboot - repeat for magiskj
+
+reboot
+
+open magisk from apps and update
+
+ERRORS AND OTHER SHIT
+
+error when unlocking bootloader:
+
+(bootloader) invalid boot state
+
+$ fastboot oem fb_mode_clear
+

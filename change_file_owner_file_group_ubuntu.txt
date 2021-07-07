@@ -1,0 +1,13 @@
+change owner file:
+
+$ chown <new_owner> <filename>
+
+Change owner/group of directory and all files within:
+
+$ chown -R <new_owner:new_group <directory>
+
+Configurable login groups.  To change login group for a user:
+
+$ usermod -g <new_login_group_name>  <user_to_add>
+
+All commands as sudo

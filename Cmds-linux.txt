@@ -1,0 +1,37 @@
+Get version of debian:
+
+$ lsb-release -a
+
+Get architecture:
+
+$ dpkg --print-architecture 
+
+You should be able to use any of the listed mirrors by adding a line to your /etc/apt/sources.list like this: (for Debian lightdm)
+
+$ deb http://ftp.de.debian.org/debian stretch main
+
+	Replacing ftp.de.debian.org/debian with the mirror in question.  
+	You can download the requested file from the pool/main/l/lightdm/ subdirectory at any of these sites
+
+If you want to change the login manager, proceed like this:
+
+$ sudo dpkg-reconfigure lightdm
+
+LightDM configuration and login screen:
+
+Tail log files for debuggin:
+
+$ tail -35 /var/log/auth.log
+
+Xerrors:
+
+$ cat ~/.xsession-errors
+
+From home directory, for login issues, try:
+
+$ chmod 775 .Xauthority
+
+$
+
+
+

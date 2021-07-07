@@ -1,0 +1,24 @@
+ Download and decompress the image from Centos website
+
+Download the image you want from here:
+http://mirror.centos.org/altarch/7/isos/armhfp/
+
+Checksum for all packages
+16ff588e04fae393671da6cc1336088201f5c633d66e519345eaf4b60e2818c3 CentOS-Userland-7-armv7hl-generic-GNOME-1804-sda.raw.xz
+950340fd8aec24651788897382f76d360c19a7f83c08dc9390637880413690f7 CentOS-Userland-7-armv7hl-generic-KDE-1804-sda.raw.xz
+1a9823b3148285a8aa8f07f49c23b4e6299aaa1f225d15334501687fb9c44398 CentOS-Userland-7-armv7hl-generic-Minimal-1804-sda.raw.xz
+23c3ec15d72e7b1934fa63ae1a7c8f4071f952c2d2c07da39c625e2559b86ccf CentOS-Userland-7-armv7hl-RaspberryPI-GNOME-1804-sda.raw.xz
+f9ed70539ad4579a7ae7bbad777e4a2614ad9df13bfb577ac2de0c72dee9e7c1 CentOS-Userland-7-armv7hl-RaspberryPI-KDE-1804-sda.raw.xz
+962264b4387a10cfd058b12b7ed1490fd3f65c9276c10a37c6746ffaabcc83f2 CentOS-Userland-7-armv7hl-RaspberryPI-Minimal-1804-sda.raw.xz
+
+2. Checksum the download
+Linux
+md5sum CentOS-Userland-7-armv7hl-generic-GNOME-1804-sda.raw.xz
+
+3. Convert the compressed .raw.xz into an .raw ISO
+
+Tar Linux
+tar xf CentOS-Userland-7-armv7hl-generic-GNOME-1804-sda.raw.xz
+
+Unxz Linux
+unxz CentOS-Userland-7-armv7hl-generic-GNOME-1804-sda.raw.xz

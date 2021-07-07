@@ -1,0 +1,9 @@
+first tenant:  dev-bzxg8pzn.auth0.com
+Region:  us
+
+
+Name: lra-v.0.1.0
+Domain: dev-bzxg8pzn.auth0.com
+ClientID: ttw1tZTSQUEciFj7q002tPRj3YvJVQZP
+ClientSecret: IyNPEdZ6-pNjWivaxym4TRPYIeb7qcG2nbZal4BU_VaY7oTnOyXccNvAqd3D8wUJ
+

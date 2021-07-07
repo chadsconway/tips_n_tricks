@@ -1,0 +1,40 @@
+**Initial testing without module
+
+Server-side: if(process.server){console.log(context.req.headers.cookie);}
+
+Browser: document.cookie
+
+**Installation and use
+yarn add cookie-universal-nuxt
+
+context.app.$cookies.<api method>
+
+API:
+> set(name, value, opts)
+
+>setAll(cookieArray)
+
+get(name, opts)
+
+>getAll(opts)
+
+>remove(name, opts
+
+>removeAll()
+
+>nodeCookie
+
+>Plugin options
+
+create lock.js in middlewares
+
+in nuxt.config.js
+	modules: 
+  /*
+  ** Nuxt.js modules
+  */
+  modules: [
+    'bootstrap-vue/nuxt',
+    'cookie-universal-nuxt',
+    '@nuxtjs/axios'
+  ],

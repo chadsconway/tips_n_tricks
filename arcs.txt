@@ -1,0 +1,7 @@
+
+
+<path d="M(move) x y a rx ry (opt. x-rotate) lg-arc-flag sweep-flag endx endy" />
+
+<path d="A (absolute)x (absolute)y rx ry rotate arc sweep ex ey" />
+
+props fill="none | color " stroke="color" stroke-width="#"

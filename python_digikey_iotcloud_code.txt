@@ -1,0 +1,89 @@
+import time
+import socket
+ 
+# Variables for our IoT Dashboard
+deviceKey = "KEY_G93JF9COWOLS03"
+host = "192.168.1.103"
+ 
+ 
+# ----------------------------------------------------------------------------------------
+# Set variable on our IoT Dashboard
+ 
+def iot_setVariable(varName, varValue):
+ 
+    # Create a socket connection for the communication
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    address = socket.getaddrinfo(host, 80)[0][-1]
+    server_address = (address, 80)
+    print('connecting to {} por {}'.format(*address))
+    
+    # Connect the socket to the port where the server is listening
+    try:
+        sock.connect(address)
+        # Create the parameters
+        keyMessage = "apikey=" + deviceKey
+        cmdMessage = "command=submit"
+        varMessage = "variable=" + varName
+        datToSend = "data=" + varValue
+        
+        # Combine the parameters to make the final string as well as the length of the packet
+        dataPacket = keyMessage + "&" + cmdMessage + "&" + varMessage + "&" + datToSend
+        dataLength = str(len(dataPacket))
+        
+ 
+        # Send this data to the website
+        POSTDATA = "POST /api.php HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Content-Type: application/x-www-form-urlencoded\r\n" + "Content-Length: " + dataLength + "\r\n" + "\r\n" + dataPacket
+        sock.send(POSTDATA.encode())       
+    except Exception as e: 
+        print("something's wrong!")
+    finally:   
+        sock.close()
+ 
+ 
+# ----------------------------------------------------------------------------------------
+# Get variable from our IoT Dashboard
+ 
+def iot_getVariable(varName):
+ 
+    # Create a socket connection for the communication
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    address = socket.getaddrinfo(host, 80)[0][-1]
+    server_address = (address, 80)
+    print('connecting to {} por {}'.format(*address))
+ 
+    dataVar = ""
+    
+    # Connect the socket to the port where the server is listening
+    try:
+        sock.connect(address)
+        # Create the parameters
+        keyMessage = "apikey=" + deviceKey
+        cmdMessage = "command=get"
+        varMessage = "variable=" + varName
+        
+        # Combine the parameters to make the final string as well as the length of the packet
+        dataPacket = keyMessage + "&" + cmdMessage + "&" + varMessage
+        dataLength = str(len(dataPacket))
+        
+ 
+        # Send this data to the website
+        POSTDATA = "POST /api.php HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Content-Type: application/x-www-form-urlencoded\r\n" + "Content-Length: " + dataLength + "\r\n" + "\r\n" + dataPacket
+        sock.send(POSTDATA.encode())
+        data = (sock.recv(1024)).decode("ASCII")
+        dataParse = data.split("\r\n\r\n\r\n")
+        dataVar = dataParse[1][0:len(dataParse[1]) - 5]
+    except Exception as e: 
+        print("something's wrong!")
+    finally:   
+        sock.close()
+ 
+    return dataVar
+ 
+ 
+ 
+# ----------------------------------------------------------------------------------------
+# Main program loop
+while(1):
+    iot_setVariable("GPIO_STATE_0", "OFF")          # Send GPIO variable to IoT Dashboard
+    gpio_state = iot_getVariable("GPIO_STATE_1")    # Receive GPIO requested state from IoT dashboard
+    time.sleep(2)                                   # Periodic sleeps prevent overloading server

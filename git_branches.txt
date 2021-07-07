@@ -1,0 +1,49 @@
+Find Out Available Existing Branches:
+
+git branch
+
+New Branch:
+
+git checkout -b <new-branch>
+
+Existing Branch:
+
+git checkout <existing-branch>
+
+Create New Branch from Existing Branch:
+
+git checkout -b <new-branch> <existing-branch>
+
+View Branch History
+
+git reflog
+
+REMOTE BRANCHES
+
+Checkout Remote Branch
+
+1.	Get All Branches of remote:
+
+		git fetch --all
+
+2.	View Available Branches
+
+		git branch
+
+3.	Checkout Branch
+
+	a.	Newer Git Versions:	git checkout <remotebranch>
+
+	b.	Older Versions: (Require making a new branch based on remote)
+
+		git checkout <remotebranch> origin/<remotebranch>
+
+	c.	Alternatively for Older Versions:  (checkout new local and
+		reset it to the remote branches last commit)
+
+		git checkout -b <branchname> git reset --hard 		origin/<branchname>
+
+NOTE ON DETACHED HEADS:
+
+If you checkout a branch git simply sets HEAD to point to branch.
+When you checkout a commit git switches to 'detached HEAD' state

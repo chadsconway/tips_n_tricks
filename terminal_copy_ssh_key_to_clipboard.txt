@@ -1,0 +1,7 @@
+
+Syntax:
+cat <path to key/key.pub> | clip.exe
+
+Example:
+(in dir ~/.ssh/)
+cat ubuntu_rsa.pub | clip.exe
